@@ -15,14 +15,20 @@ WindowArray=($Window)
 
 #Set keyboard to 'Normal' layout
 Normal () {
-  echo Normal;
 	echo mode 1 switch > /dev/input/ckb1/cmd;
+
+  if [[ $1 == "all" ]]; then
+    echo Normal;
+  fi
 }
 
 #Set keyboard to 'Game' layout
 Game () {
-  echo Game;
 	echo mode 2 switch > /dev/input/ckb1/cmd;
+
+  if [[ $1 == "all" ]]; then
+    echo Game;
+  fi
 }
 
 #Look at the current window title and compare it to the GameList and update the Layout acoordingly
@@ -36,24 +42,25 @@ ChangeLayout () {
 			Layout="set"
 		fi
 	done
-        for x in "${UnShabangedList[@]}"; do
-        if [[ "$x" == "${WindowArray[@]}" ]]; then
-            Game;
-            Layout="set";
-        fi
-    done
+
+  for x in "${UnShabangedList[@]}"; do
+    if [[ "$x" == "${WindowArray[@]}" ]]; then
+      Game;
+      Layout="set";
+    fi
+  done
 
 	if [[ $Layout == "set" ]]; then
 		:
-    elif [[ $Window == "" ]]; then
+  elif [[ $Window == "" ]]; then #Prevents windows with no title from triggering game mode such as steam setting dropdowns
        Normal;
 	else
 		Normal;
 	fi
 
-    if [[ $1 == "all" ]]; then
-        echo "Window has changed:"
-        echo """Current Window: ${Window}
+  if [[ $1 == "all" ]]; then
+    echo "Window has changed:"
+    echo """Current Window: ${Window}
 -------------------------------------------------->""";
     fi
 }
@@ -87,7 +94,7 @@ UpdateGameList () {
     fi
 
     ChangeLayout $debug;
-    
+
 }
 
 #Close ckb-next, enter active mode on the deamon, then switch to the normal layout
