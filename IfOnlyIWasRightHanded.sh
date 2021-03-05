@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #GameList file
-touch $(dirname $(readlink -f $0))/GameList.txt
 GameList=$(dirname $(readlink -f $0))/GameList.txt
 
 
@@ -69,8 +68,7 @@ UpdateGameList () {
     ShabangedList=()
     UnShabangedList=()
 
-    #Update the window title it checks to see if it has changed
-    Start=`cat $GameList`;
+    Start=`cat $GameList` || touch $(dirname $(readlink -f $0))/GameList.txt && Start=`cat $GameList` #cat the GameList, if it doesnt exists create it then cat it
 
     #Put the game list file into an array
     mapfile -t shabanged < $GameList
