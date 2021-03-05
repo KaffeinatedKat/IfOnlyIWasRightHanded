@@ -26,7 +26,7 @@ If you put a '::' at the end of a games name in the GameList.txt file it will Sh
 
 ### Debug Mode
 
-Debug mode prints the current window name, the current keyboard layout mode when a new window is put in focus
+Debug mode prints the current window name, the current keyboard layout mode when a new window is put in focus to the console
 
 If the GameList.txt file is updated and debug mode is on the new Gamelist will be printed to the console and then it will print the list of games with a shebang and without a shebang
 
@@ -44,7 +44,7 @@ Animated lighting with ckb-next: Not working
 
 # Future Plans
 
-Solution for in game text chat
+Solution for in game text boxes
 
 xmodmap solution for rebinding keys if ckb-next doesn't support your keyboard
 
