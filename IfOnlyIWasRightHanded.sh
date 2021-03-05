@@ -100,17 +100,18 @@ Normal;
 
 while getopts ":d:" arg; do
   case $arg in
-    d) debug=$OPTARG;;
+    d) debug=$OPTARG
+      if [[ $debug == "" ]]; then
+        :
+      elif [[ $debug != "all" ]]; then
+        echo "Invalid -d OPTARG";
+        exit 1;
+      fi;;
   esac
 done
 
 echo $debug;
-if [[ $debug == "" ]]; then
-  :
-elif [[ $debug != "all" ]]; then
-  echo "Invalid -d OPTARG";
-  exit 1;
-fi
+
 
 UpdateGameList $debug;
 
