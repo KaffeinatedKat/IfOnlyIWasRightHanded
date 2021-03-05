@@ -51,7 +51,7 @@ ChangeLayout () {
 		Normal;
 	fi
 
-    if [[ $1 == "debug" || $debug == "true" ]]; then
+    if [[ $1 == "all" ]]; then
         echo "Window has changed:"
         echo """Current Window: ${Window}
 -------------------------------------------------->""";
@@ -80,14 +80,14 @@ UpdateGameList () {
         fi
     done
 
-    if [[ $1 == "debug" || $debug == "true" ]]; then
+    if [[ $1 == "all" ]]; then
         echo "GameList updated:"
         echo "Games with a Shebang: ${ShabangedList[@]}"
         echo "Games without a Shebang: ${UnShabangedList[@]}"
-        ChangeLayout debug;
-    else
-        ChangeLayout;
     fi
+
+    ChangeLayout $debug;
+    
 }
 
 #Close ckb-next, enter active mode on the deamon, then switch to the normal layout
@@ -96,24 +96,32 @@ sleep 0.2;
 echo active > /dev/input/ckb1/cmd;
 Normal;
 
-if [[ $1 == "debug" ]]; then
-    debug="true";
-    UpdateGameList debug;
-else
-    UpdateGameList;
+while getopts ":d:" arg; do
+  case $arg in
+    d) debug=$OPTARG;;
+  esac
+done
+
+echo $debug;
+if [[ $debug == "" ]]; then
+  :
+elif [[ $debug != "all" ]]; then
+  echo "Invalid -d OPTARG";
+  exit 1;
 fi
 
+UpdateGameList $debug;
 
 while [ true ];
 do
 
 	#Check if the GameList file has updated, if so update the array with the new list
 	if [[ $Start != `cat $GameList` ]]; then
-		UpdateGameList;
+		UpdateGameList $debug;
 	fi
 
 	#Get the name of the current window in focus, then update the keyboard layout accordingly
 	if [[ $Window != `xdotool getactivewindow getwindowname` ]]; then
-		ChangeLayout;
+		ChangeLayout $debug;
 	fi
 done

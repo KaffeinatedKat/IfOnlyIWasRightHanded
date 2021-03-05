@@ -16,7 +16,7 @@ Make the mode you use for normal typing the first mode and the one you custom bo
 
 Put the window names of all your games in the GameList.txt file
 
-Run IfOnlyIWasRightHanded.sh 
+Run IfOnlyIWasRightHanded.sh
 
 ### Shebangs
 
@@ -30,7 +30,7 @@ Debug mode prints the current window name, the current keyboard layout mode when
 
 If the GameList.txt file is updated and debug mode is on the new Gamelist will be printed to the console and then it will print the list of games with a shebang and without a shebang
 
-You can enable debug mode by putting "debug" as a command line argument for the bash script
+You can enable debug mode by running the script with "-d all"
 
 # What currently does and doesn't work
 Dynamically switching modes if game is in focus: Working
@@ -50,6 +50,6 @@ xmodmap solution for rebinding keys if ckb-next doesn't support your keyboard
 
 More gamelist arguments such as ["TypingKey", "Wildcard", "CursorCheck", "Refreshrate"]
 
-Windows Support 
+Windows Support
 
 GUI
