@@ -1,12 +1,9 @@
 #!/bin/bash
 
-#Check if the GameList.txt file exists in the users home directory, if not create one
-if [[ `ls -l $HOME/GameList.txt` == *"No such file or directory"* ]]; then
-  touch $HOME/GameList.txt
-fi
-
 #GameList file
-GameList=$HOME/GameList.txt
+touch $(dirname $(readlink -f $0))/GameList.txt
+GameList=$(dirname $(readlink -f $0))/GameList.txt
+
 
 #Get title of current window in focus and put it into a string and an array
 Window=`xdotool getactivewindow getwindowname`;
