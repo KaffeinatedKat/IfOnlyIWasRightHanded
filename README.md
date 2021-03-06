@@ -4,13 +4,16 @@ A dynamic keyboard binding switcher for left handed gamers
 Uses ckb-next or key-mapper to switch keyboard layouts to one that rebinds default game bindings such as WASD to your custom ones if you are left handed and use your mouse on the other side of the keyboard.
 
 # Requirements:
-key-mapper (https://github.com/sezanzeb/key-mapper)
+[key-mapper](https://github.com/sezanzeb/key-mapper "key-mapper")
+
 
 or
 
-ckb-next (https://github.com/ckb-next/ckb-next)
+[ckb-next](https://github.com/ckb-next/ckb-next "ckb-next")
 
 xdotool
+
+your current user needs to be in the "input" group if you are using key-mapper
 
 # How to use
 
@@ -26,9 +29,13 @@ Run IfOnlyIWasRightHanded.sh with "-m ckb"
 
 ### with key-mapper (the default)
 
+add your current user to the 'input' group if not already
+
 Put the window names of all your games in the GameList.txt file
 
-Run IfOnlyIWasRightHanded.sh and follow the setup
+Run IfOnlyIWasRightHanded.sh and follow the setup 
+
+**The script will ask if you want to install key-mapper if it is not currently installed, the installer only works on Debian based systems, for other distros reference the [readme](https://github.com/sezanzeb/key-mapper#installation "readme")**
 
 ### Shebangs
 
@@ -51,18 +58,23 @@ ckb-next mode runs the program with ckb-next as the keyboard layout switcher ins
 You can enable ckb-next mode by running the script with "-m ckb"
 
 # What currently does and doesn't work
+ckb-next and key-mapper support: Working
+
 Dynamically switching modes if game is in focus: Working
 
 File of game names to switch modes if name is list is the current window: Working
 
 Updateable GameList file while program is running: Working
 
-Animated lighting with ckb-next: Not working
-
+Animated lighting with ckb-next: Not Working
 
 # Future Plans
 
 Solution for in game text boxes
+
+key-mapper autoinstall options for other distros
+
+Better ckb-next support (aka AutoMapping Modes, working animations)
 
 More gamelist arguments such as ["TypingKey", "Wildcard", "CursorCheck", "Refreshrate"]
 
