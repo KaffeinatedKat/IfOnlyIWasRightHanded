@@ -141,12 +141,11 @@ UpdateGameList () {
 
 
 Setup () {
-  zenity --info --no-wrap --text  "Select your keyboard from the dropdown, set your custom bindings for games and name the preset 'Game', then close the Key Mapper window\n <b>Do not forget to save the preset before closing the Key Mapper window</b>"
+  zenity --info --no-wrap --text  "Select your keyboard from the dropdown, set your custom bindings for games and name the preset 'Game', then close the Key Mapper window\n <b>Do not forget to save the preset before closing the Key Mapper window</b>\n\nIf your 'Game' preset already exists with your bindings just close the Key Mapper window"
   key-mapper-gtk
   replace-line-in-file "${wd}.KeyMapper-config" 1 'Setup Game Profile: yes'
   devices=$(python3 GetDevices.py)
   IFS=',' read -r -a array <<< "$devices"
-
   number=-1
   for i in "${array[@]}"; do
     number=$((number+1))
