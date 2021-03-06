@@ -34,7 +34,7 @@ Normal () {
     echo mode 1 switch > /dev/input/ckb1/cmd;
   elif [[ $current != 'normal' ]]; then
     echo "${keyboard}"
-    key-mapper-control --command start --device "${keyboard}" --preset 'Normal'
+    key-mapper-control --command start --device "${config[1]}" --preset 'Normal'
     current='normal'
   fi
 
@@ -50,7 +50,7 @@ Game () {
     echo "ckb-next mode"
     echo mode 2 switch > /dev/input/ckb1/cmd;
   elif [[ $current != "game" ]]; then
-    key-mapper-control --command start --device "${keyboard}" --preset 'Game'
+    key-mapper-control --command start --device "${config[1]}" --preset 'Game'
     current='game'
   fi
 
