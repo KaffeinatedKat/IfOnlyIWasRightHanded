@@ -1,14 +1,20 @@
 # IfOnlyIWasRightHanded
 A dynamic keyboard binding switcher for left handed gamers
 
-Uses ckb-next to switch keyboard layouts to one that rebinds default game bindings such as WASD to your custom ones if you are left handed and use your mouse on the other side of the keyboard.
+Uses ckb-next or key-mapper to switch keyboard layouts to one that rebinds default game bindings such as WASD to your custom ones if you are left handed and use your mouse on the other side of the keyboard.
 
 # Requirements:
-ckb-next (and a keyboard that supports it)
+key-mapper (https://github.com/sezanzeb/key-mapper)
+
+or
+
+ckb-next (https://github.com/ckb-next/ckb-next)
 
 xdotool
 
 # How to use
+
+### with ckb-next
 
 Make 2 keyboard modes for your keyboard in ckb-next
 
@@ -16,7 +22,13 @@ Make the mode you use for normal typing the first mode and the one you custom bo
 
 Put the window names of all your games in the GameList.txt file
 
-Run IfOnlyIWasRightHanded.sh
+Run IfOnlyIWasRightHanded.sh with "-m ckb"
+
+### with key-mapper (the default)
+
+Put the window names of all your games in the GameList.txt file
+
+Run IfOnlyIWasRightHanded.sh and follow the setup
 
 ### Shebangs
 
@@ -32,6 +44,12 @@ If the GameList.txt file is updated and debug mode is on the new Gamelist will b
 
 You can enable debug mode by running the script with "-d all"
 
+### ckb-next mode
+
+ckb-next mode runs the program with ckb-next as the keyboard layout switcher instead of the defualt key-mapper, only use this if you have a keyboard that supports ckb-next
+
+You can enable ckb-next mode by running the script with "-m ckb"
+
 # What currently does and doesn't work
 Dynamically switching modes if game is in focus: Working
 
@@ -45,8 +63,6 @@ Animated lighting with ckb-next: Not working
 # Future Plans
 
 Solution for in game text boxes
-
-xmodmap solution for rebinding keys if ckb-next doesn't support your keyboard
 
 More gamelist arguments such as ["TypingKey", "Wildcard", "CursorCheck", "Refreshrate"]
 
