@@ -168,22 +168,23 @@ if [[ $mode == "ckb" ]]; then
 else
   if ! command -v key-mapper-control &> /dev/null; then #Check if key-mapper is installed
     read -p "key-mapper does not appear to be installed, would you like to install it now? (y/n) " -n 1 -r #if not ask if you want the script to install it
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         exit
     fi
-    cd #Installing key-mapper from github
+
+    cd #Installing key-mapper(debain) from github
     sudo apt install git python3-setuptools
     git clone https://github.com/sezanzeb/key-mapper.git
     cd key-mapper; ./scripts/build.sh
     sudo apt install ./dist/key-mapper-0.7.0.deb
     cd $wd
-    fi
+
+  fi
 fi
 
 
 echo "${config[0]}"
-if [[ $(echo "${config[0]}") == "Setup Game Profile: yes" ]]; then
+if [[ "${config[0]}" == "Setup Game Profile: yes" ]] && [[ "${config[1]}" != "[insert yet another line here]" ]] && [[ "${config[1]}" != "" ]]; then
   :
 else
   echo """[insert line here]
