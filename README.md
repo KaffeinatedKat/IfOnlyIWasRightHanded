@@ -4,11 +4,12 @@ A dynamic keyboard binding switcher for left handed gamers
 Uses ckb-next or key-mapper to switch keyboard layouts to one that rebinds default game bindings such as WASD to your custom ones if you are left handed and use your mouse on the other side of the keyboard.
 
 # Requirements:
-key-mapper (https://github.com/sezanzeb/key-mapper) "Will prompt to install it for you if not already installed"
+[key-mapper](https://github.com/sezanzeb/key-mapper "key-mapper")
+
 
 or
 
-ckb-next (https://github.com/ckb-next/ckb-next)
+[ckb-next](https://github.com/ckb-next/ckb-next "ckb-next")
 
 xdotool
 
@@ -32,7 +33,9 @@ add your current user to the 'input' group if not already
 
 Put the window names of all your games in the GameList.txt file
 
-Run IfOnlyIWasRightHanded.sh and follow the setup
+Run IfOnlyIWasRightHanded.sh and follow the setup 
+
+**The script will ask if you want to install key-mapper if it is not currently installed, the installer only works on Debian based systems, for other distros reference the [readme](https://github.com/sezanzeb/key-mapper#installation "readme")**
 
 ### Shebangs
 
@@ -68,6 +71,8 @@ Animated lighting with ckb-next: Not Working
 # Future Plans
 
 Solution for in game text boxes
+
+key-mapper autoinstall options for other distros
 
 Better ckb-next support (aka AutoMapping Modes, working animations)
 
