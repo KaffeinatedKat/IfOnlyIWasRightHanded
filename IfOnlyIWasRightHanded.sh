@@ -70,11 +70,12 @@ function replace-line-in-file() {
     sed -i "${line_num}s/.*/$replacement_escaped/" "$file"
 }
 
-#Look at the current window title and compare it to the GameList and update the Layout acoordingly
-ChangeLayout () {
+
+ChangeLayout () { #Look at the current window title and compare it to the GameList and update the Layout acoordingly
   Layout="unset"
 	Window=`xdotool getactivewindow getwindowname`;
 	WindowArray=($Window)
+
 	for x in "${ShabangedList[@]}"; do
 		if echo "${WindowArray[@]}" | fgrep --word-regexp "$x"; then
 			Game;
@@ -110,33 +111,30 @@ ChangeLayout () {
 
 #Update the GameList Variable if the file is changed
 UpdateGameList () {
-
     #Define the vars
     ShabangedList=()
     UnShabangedList=()
 
+    mapfile -t GameListArray < $GameList #Update the gamelist variable
+
     Start=`cat $GameList` || touch $(dirname $(readlink -f $0))/GameList.txt && Start=`cat $GameList` #cat the GameList, if it doesnt exists create it then cat it
 
-    #Put the game list file into an array
-    mapfile -t shabanged < $GameList
-
     #Add the games into either games with or without a shebang
-    for x in "${shabanged[@]}"; do
+    for x in "${GameListArray[@]}"; do
         if [[ $x == *:: ]]; then
-            ShabangedList+=("${x%??}")
+            ShabangedList+=("${x%??}") #Add games with a shebang to the shebanged array with the :: removed
         else
-            UnShabangedList+=("${x}")
+            UnShabangedList+=("${x}") #Add everything else to the non-shebanged array
         fi
     done
 
-    if [[ $1 == "all" ]]; then
+    if [[ $1 == "all" ]]; then #Output debug info
         echo "GameList updated:"
         echo "Games with a Shebang: ${ShabangedList[@]}"
         echo "Games without a Shebang: ${UnShabangedList[@]}"
     fi
 
-    ChangeLayout $debug $mode;
-
+    ChangeLayout $debug $mode; #Run ChangeLayout with the updated GameList
 }
 
 
@@ -144,7 +142,7 @@ Setup () {
   zenity --info --no-wrap --text  "Select your keyboard from the dropdown, set your custom bindings for games and name the preset 'Game', then close the Key Mapper window\n <b>Do not forget to save the preset before closing the Key Mapper window</b>\n\nIf your 'Game' preset already exists with your bindings just close the Key Mapper window"
   key-mapper-gtk
   replace-line-in-file "${wd}.KeyMapper-config" 1 'Setup Game Profile: yes'
-  devices=$(python3 GetDevices.py)
+  devices=$(python3 "${wd}GetDevices.py")
   IFS=',' read -r -a array <<< "$devices"
   number=-1
   for i in "${array[@]}"; do
