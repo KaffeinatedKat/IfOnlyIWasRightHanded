@@ -72,6 +72,8 @@ Animated lighting with ckb-next: Not Working
 
 Solution for in game text boxes
 
+A instant keybinding switching option for non ckb-next (ckb-next switches modes instantly with no delay and key-mapper takes a second to switch bindings)
+
 key-mapper autoinstall options for other distros
 
 Better ckb-next support (aka AutoMapping Modes, working animations)
