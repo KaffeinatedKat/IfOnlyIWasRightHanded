@@ -76,27 +76,30 @@ ChangeLayout () { #Look at the current window title and compare it to the GameLi
 	Window=`xdotool getactivewindow getwindowname`;
 	WindowArray=($Window)
 
-	for x in "${ShabangedList[@]}"; do
-		if echo "${WindowArray[@]}" | fgrep --word-regexp "$x"; then
-			Game;
-			Layout="set"
-		fi
-	done
+  if [[ -n "$Window" ]]; then
 
-  for x in "${UnShabangedList[@]}"; do
-    if [[ "$x" == "${WindowArray[@]}" ]]; then
-      Game;
-      Layout="set";
-    fi
-  done
+    for x in "${ShabangedList[@]}"; do
+  		if echo "${WindowArray[@]}" | fgrep --word-regexp "$x"; then
+  			Game;
+  			Layout="set"
+  		fi
+  	done
 
-	if [[ $Layout == "set" ]]; then
-		:
-  elif [[ $Window == "" ]]; then #Prevents windows with no title from triggering game mode such as steam setting dropdowns
-       Normal;
-	else
-		Normal;
-	fi
+    for x in "${UnShabangedList[@]}"; do
+      if [[ "$x" == "${WindowArray[@]}" ]]; then
+        Game;
+        Layout="set";
+      fi
+    done
+
+  	if [[ $Layout == "set" ]]; then
+  		:
+  	else
+  		Normal;
+  	fi
+  else
+    Normal;
+  fi
 
   if [[ $1 == "all" ]]; then
     echo "Window has changed"
