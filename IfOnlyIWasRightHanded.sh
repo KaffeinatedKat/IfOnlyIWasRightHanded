@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mapfile -t config < $(dirname $(readlink -f $0))/.KeyMapper-config
+mapfile -t config < $(dirname $(readlink -f $0))/KeyMapper/.KeyMapper-config
 keyboard="${config[1]}"
 
 #GameList file
@@ -144,8 +144,8 @@ UpdateGameList () {
 Setup () {
   zenity --info --no-wrap --text  "Select your keyboard from the dropdown, set your custom bindings for games and name the preset 'Game', then close the Key Mapper window\n <b>Do not forget to save the preset before closing the Key Mapper window</b>\n\nIf your 'Game' preset already exists with your bindings just close the Key Mapper window"
   key-mapper-gtk
-  replace-line-in-file "${wd}.KeyMapper-config" 1 'Setup Game Profile: yes'
-  devices=$(python3 "${wd}GetDevices.py")
+  replace-line-in-file "${wd}KeyMapper/.KeyMapper-config" 1 'Setup Game Profile: yes'
+  devices=$(python3 "${wd}KeyMapper/GetDevices.py")
   IFS=',' read -r -a array <<< "$devices"
   number=-1
   for i in "${array[@]}"; do
@@ -153,9 +153,9 @@ Setup () {
     echo $number: $i
   done
   read -p "Which keyboard is yours? " board
-  replace-line-in-file "${wd}.KeyMapper-config" 2 "${array[$board]:2}"
+  replace-line-in-file "${wd}KeyMapper/.KeyMapper-config" 2 "${array[$board]:2}"
   mapfile -t config < $(dirname $(readlink -f $0))/.KeyMapper-config
-  cp "${wd}Normal.json" $HOME/.config/key-mapper/presets/"${config[1]}"
+  cp "${wd}KeyMapper/Normal.json" $HOME/.config/key-mapper/presets/"${config[1]}"
 }
 
 
@@ -188,12 +188,12 @@ if [[ "${config[0]}" == "Setup Game Profile: yes" ]] && [[ "${config[1]}" != "[i
   :
 else
   echo """[insert line here]
-[insert yet another line here]""" > "${wd}.KeyMapper-config"
+[insert yet another line here]""" > "${wd}KeyMapper/.KeyMapper-config"
   Setup;
 fi
 
 
-mapfile -t config < $(dirname $(readlink -f $0))/.KeyMapper-config
+mapfile -t config < $(dirname $(readlink -f $0))/KeyMapper/.KeyMapper-config
 Normal;
 keyboard="${config[1]}"
 UpdateGameList $debug $mode;
