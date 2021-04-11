@@ -4,12 +4,7 @@ A dynamic keyboard binding switcher for left handed gamers
 Uses ckb-next or key-mapper to switch keyboard layouts to one that rebinds default game bindings such as WASD to your custom ones if you are left handed and use your mouse on the other side of the keyboard.
 
 # Requirements:
-[key-mapper](https://github.com/sezanzeb/key-mapper "key-mapper")
-
-
-or
-
-[ckb-next](https://github.com/ckb-next/ckb-next "ckb-next")
+[key-mapper](https://github.com/sezanzeb/key-mapper "key-mapper") or [ckb-next](https://github.com/ckb-next/ckb-next "ckb-next")
 
 xdotool
 
