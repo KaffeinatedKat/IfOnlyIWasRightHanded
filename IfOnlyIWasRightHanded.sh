@@ -3,23 +3,22 @@
 mapfile -t config < $(dirname $(readlink -f $0))/KeyMapper/.KeyMapper-config
 keyboard="${config[1]}"
 
-#GameList file
-GameList=$(dirname $(readlink -f $0))/GameList.txt
+GameList=$(dirname $(readlink -f $0))/GameList.txt #Assign the location of the GameList.txt file to $GameList, this will create the file if it does not already exist
 
-wd=$(dirname $(readlink -f $0))/
+wd=$(dirname $(readlink -f $0))/ #Assign the directory this file is in to $wd
 
 #Get title of current window in focus and put it into a string and an array
 Window=`xdotool getactivewindow getwindowname`;
 WindowArray=($Window)
 
-while getopts ":d:m:" arg; do
+while getopts ":d:m:" arg; do #Define GetOpts 
   case $arg in
-    d) debug=$OPTARG
+    d) debug=$OPTARG #Define the -d (debug) argument
       if [[ $debug != "all" ]]; then
         echo "Invalid -d OPTARG {$OPTARG}";
         exit 1;
       fi;;
-    m) mode=$OPTARG
+    m) mode=$OPTARG #Define the -m (mode) argument
       if [[ $mode != "ckb" ]]; then
         echo "Invalid -m OPTARG {$OPTARG}";
         exit 1;
@@ -27,12 +26,11 @@ while getopts ":d:m:" arg; do
   esac
 done
 
-#Set keyboard to 'Normal' layout
-Normal () {
-  if [[ $mode == "ckb" ]]; then
+Normal () { #Sets the keyboad layout to "Normal"
+  if [[ $mode == "ckb" ]]; then #Change with ckb-next
     echo "ckb-next mode"
     echo mode 1 switch > /dev/input/ckb1/cmd;
-  elif [[ $current != 'normal' ]]; then
+  elif [[ $current != 'normal' ]]; then #Change with key-mapper
     echo "${keyboard}"
     key-mapper-control --command start --device "${config[1]}" --preset 'Normal'
     current='normal'
@@ -44,12 +42,11 @@ Normal () {
   fi
 }
 
-#Set keyboard to 'Game' layout
-Game () {
-  if [[ $mode == "ckb" ]]; then
+Game () { #Sets the keyboard layout to "Game"
+  if [[ $mode == "ckb" ]]; then #Change with ckb-next
     echo "ckb-next mode"
     echo mode 2 switch > /dev/input/ckb1/cmd;
-  elif [[ $current != "game" ]]; then
+  elif [[ $current != "game" ]]; then #Change with key-mapper
     key-mapper-control --command start --device "${config[1]}" --preset 'Game'
     current='game'
   fi
@@ -71,21 +68,21 @@ function replace-line-in-file() {
 }
 
 
-ChangeLayout () { #Look at the current window title and compare it to the GameList and update the Layout acoordingly
-  Layout="unset"
-	Window=`xdotool getactivewindow getwindowname`;
-	WindowArray=($Window)
+ChangeLayout () { #Look for current window title in GameList 
+  Layout="unset" 
+  Window=`xdotool getactivewindow getwindowname`;
+  WindowArray=($Window)
 
   if [[ -n "$Window" ]]; then
 
-    for x in "${ShabangedList[@]}"; do
+    for x in "${ShabangedList[@]}"; do #Compare all Shebanged games with window title
   		if echo "${WindowArray[@]}" | fgrep --word-regexp "$x"; then
   			Game;
   			Layout="set"
   		fi
   	done
 
-    for x in "${UnShabangedList[@]}"; do
+    for x in "${UnShabangedList[@]}"; do #Compare all non-shebanged games with window title
       if [[ "$x" == "${WindowArray[@]}" ]]; then
         Game;
         Layout="set";
@@ -93,15 +90,15 @@ ChangeLayout () { #Look at the current window title and compare it to the GameLi
     done
 
   	if [[ $Layout == "set" ]]; then
-  		:
+  		: #If the layout was set by one of the functions above do nothing
   	else
-  		Normal;
+  		Normal; #If the layout was not set change to "Normal"
   	fi
   else
     Normal;
   fi
 
-  if [[ $1 == "all" ]]; then
+  if [[ $1 == "all" ]]; then #echo debug info if set
     echo "Window has changed"
     echo """Current Window: ${Window}
 -------------------------------------------------->""";
@@ -112,9 +109,7 @@ ChangeLayout () { #Look at the current window title and compare it to the GameLi
   fi
 }
 
-#Update the GameList Variable if the file is changed
-UpdateGameList () {
-    #Define the vars
+UpdateGameList () { #Put the contents of GameList.txt into the Shabanged and UnShabanged arrays
     ShabangedList=()
     UnShabangedList=()
 
@@ -125,9 +120,9 @@ UpdateGameList () {
     #Add the games into either games with or without a shebang
     for x in "${GameListArray[@]}"; do
         if [[ $x == *:: ]]; then
-            ShabangedList+=("${x%??}") #Add games with a shebang to the shebanged array with the :: removed
+            ShabangedList+=("${x%??}") #Add games with :: at the end
         else
-            UnShabangedList+=("${x}") #Add everything else to the non-shebanged array
+            UnShabangedList+=("${x}") #Add everything else
         fi
     done
 
@@ -201,12 +196,11 @@ UpdateGameList $debug $mode;
 while [ true ];
 do
 
-	#Check if the GameList file has updated, if so update the array with the new list
-	if [[ $Start != `cat $GameList` ]]; then
+	if [[ $Start != `cat $GameList` ]]; then #If the GameList file has been modified re-assign the GameList arrays
 		UpdateGameList $debug $mode;
 	fi
 
-	#Get the name of the current window in focus, then update the keyboard layout accordingly
+	#If the title of the current window changes check it with the GameList arrays
 	if [[ $Window != `xdotool getactivewindow getwindowname` ]]; then
 		ChangeLayout $debug $mode;
 	fi
