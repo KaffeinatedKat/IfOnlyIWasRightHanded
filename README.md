@@ -10,6 +10,8 @@ I designed this program because I am left handed and I hate having to rebind all
 
 [xdotool](https://github.com/jordansissel/xdotool)
 
+[pynput](https://pypi.org/project/pynput/)
+
 # How to use
 
 ### with ckb-next
