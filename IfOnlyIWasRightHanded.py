@@ -1,76 +1,79 @@
 #!python3
-import pathlib, time, threading, os, subprocess
+import pathlib, time, threading, os, subprocess, arguments, sys
 from pynput.keyboard import Key, Listener
+global debug
 
-
-class Keypress (threading.Thread):
+class Keypress (threading.Thread): #Thread for TypingKey Check
    def __init__(self, threadID, name):
       threading.Thread.__init__(self)
       self.name = name
    def run(self):
-      print("Starting " + self.name)
+      print("Started " + self.name)
 
       with Listener(on_press = lambda event: KeypressRun(event)) as listener:
           listener.join()
 
       print("Exiting " + self.name)
 
-class Cycle (threading.Thread):
-   def __init__(self, threadID, name):
+class Cycle (threading.Thread): #Thread for while loop
+   def __init__(self, threadID, name, StartFile, GameList):
       threading.Thread.__init__(self)
       self.name = name
    def run(self):
-      print("Starting " + self.name)
+      print("Started " + self.name)
 
-      CycleRun(Timer, TimerValue)
+      CycleRun(Timer, TimerValue, StartFile, GameList)
 
       print("Exiting " + self.name)
 
-def CycleRun(Timer, TimerValue):
+def CycleRun(Timer, TimerValue, StartFile, GameList):
     global WindowName
     while True:
         Timer -= 1
         time.sleep(0.2)
-        print(Timer)
         if Timer == 0:
             Timer = TimerValue
 
-            UpdateGameList(GameList, AbPath)
+            if StartFile != sh("cat {0}".format(GameList)):
+                UpdateGameList(GameList, AbPath)
 
-            if sh("xdotool getactivewindow getwindowname") != WindowName:
+            if sh("xdotool getactivewindow getwindowname") != WindowName: #If last known window title is not current update the string
                 WindowName = sh("xdotool getactivewindow getwindowname")
-                print(WindowName)
+                if debug == True:
+                    print("Window Changed\nNew Window: {0}".format(WindowName))
+
                 ChangeLayout(WindowName)
 
 
 def KeypressRun(key):
     global Mode
     if key == Key.enter:
-        print("Enta")
+        if debug == True:
+            print("Enter Key has been pressed")
+
         if Mode == 2:
             Mode = 3
-            GameType()
+            ModeSwitch("GameType")
 
         elif Mode == 3:
             Mode = 2
-            Game()
+            ModeSwitch("Game")
 
 
     if key == Key.delete:
         # Stop listener
         return False
 
-def Game():
-    print("Game")
-    os.system("echo mode 2 switch > /dev/input/ckb1/cmd;")
+def ModeSwitch(mode):
+    if mode == "Game":
+        os.system("echo mode 2 switch > /dev/input/ckb1/cmd;")
+    elif mode == "Normal":
+        os.system("echo mode 1 switch > /dev/input/ckb1/cmd;")
+    elif mode == "GameType":
+        os.system("echo mode 3 switch > /dev/input/ckb1/cmd;")
 
-def Normal():
-    print("Normal")
-    os.system("echo mode 1 switch > /dev/input/ckb1/cmd;")
-
-def GameType():
-    print("GameType")
-    os.system("echo mode 3 switch > /dev/input/ckb1/cmd;")
+    if debug == True:
+        print("Mode Switched to: {0}".format(mode))
 
 def UpdateGameList(GameList, AbPath):
     global ShebangedList, UnShebangedList
@@ -79,68 +82,65 @@ def UpdateGameList(GameList, AbPath):
 
     ShebangedList, UnShebangedList = [], [] #Clear the prior GameList Arrays
 
-
-    #print(f.read().splitlines())
-
     for x in f.read().splitlines(): #Split the GameList file via linebreak
         if x.endswith("::"):
             ShebangedList += [x[:-2]] #Add game to shebang list if it has a shebang
         else:
             UnShebangedList += [x] #If a game does not have a shebang add it to the normal list
 
-    print(ShebangedList)
-    print(UnShebangedList)
+    if debug == True:
+        print(ShebangedList)
+        print(UnShebangedList)
 
 def ChangeLayout(WindowName):
     global Mode
     Layout = 0
 
     for x in ShebangedList:
-        print(x)
-        if x == WindowName:
+        if x in WindowName: #If shebanged gamename is in the window title
             Mode, Layout = 2, 1
-            Game()
+            ModeSwitch("Game")
 
-    for x in UnShebangedList:
-        print(x)
+    for x in UnShebangedList: #If window title in GameList
         if x == WindowName:
             Mode, Layout = 2, 1
-            Game()
+            ModeSwitch("Game")
 
     if Layout == 0:
         Mode = 1
-        Normal()
+        ModeSwitch("Normal")
 
 def sh(cmd, input=""):
     rst = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, input=input.encode("utf-8"))
     assert rst.returncode == 0, rst.stderr.decode("utf-8")
     return rst.stdout.decode("utf-8")[:-1]
 
+ShebangedList, UnShebangedList = [], []
+
+debug = False
+
+Mode = 1
+TimerValue = 4
+Timer = 4
 
 WindowName = sh("xdotool getactivewindow getwindowname")
 
 AbPath = pathlib.Path(__file__).parent.resolve()
-
-ShebangedList, UnShebangedList = [], []
-
 GameList = str(AbPath) + "/GameList.txt"
-UpdateGameList(GameList, AbPath)
 
-print(AbPath)
+StartFile = sh("cat {0}".format(GameList))
 
-TimerValue = 4
-Timer = 4
+if __name__ == "__main__":
+    UpdateGameList(GameList, AbPath)
 
-Mode = 1
+    try:
+        if str(sys.argv[1]) == "debug":
+            print("Debug mode enabled")
+            debug = True
+    except:
+        None
 
-
-
-
-
-Keypress = Keypress(1, "Keypress")
-Cycle = Cycle(2, "Cycle")
-Keypress.start()
-Cycle.start()
-
-#with Listener(on_press = lambda event: show(event)) as listener:
-#    listener.join()
+    Keypress = Keypress(1, "Keypress")
+    Cycle = Cycle(2, "Cycle", StartFile, GameList)
+    Keypress.start()
+    Cycle.start()
