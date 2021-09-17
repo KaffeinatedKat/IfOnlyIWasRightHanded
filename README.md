@@ -9,9 +9,12 @@ I designed this program because I am left handed and I hate having to rebind all
 
 [xdotool](https://github.com/jordansissel/xdotool)
 
+[pynput](https://pypi.org/project/pynput/)
+
+[arguments](https://pypi.org/project/arguments/)
+
 # How to use
 
-### with ckb-next
 Create 3 different mode in ckb-next
 
 The first one will be your default mode
@@ -29,6 +32,14 @@ Run 'IfOnlyIWasRightHanded.py'
 Shebangs are a GameList argument you can use if a games window title is dynamic (Terraria for example)
 
 If you put a '::' at the end of a games name in the GameList.txt file it will Shebang it and if the current window in focus contains the word that was shebanged it will switch modes, regardless of what else is in the title
+
+### Arguments
+
+`--debug`
+Outputs debug information such as when it sees a window change, when it switches modes, when the GameList file is updated/changed
+
+
+By default, pressing the Super key switches the mode to Normal. This is so if you open the app search while tabbed into a game it't switch to normal so you can type. You can disable this with `-ds` or `--DisableSuper`
 
 # Future Plans
 
