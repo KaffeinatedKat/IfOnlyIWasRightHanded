@@ -2,6 +2,7 @@
 A dynamic keyboard binding switcher for left handed gamers
 
 This program uses ckb-next to switch keyboard modes depending on the window currently in focus
+
 I designed this program because I am left handed and I hate having to rebind all my in game controls to accommodate for the fact that my mouse is the on left of my keyboard. Now I can just rebind the entire keyboard once, and itl work across games. Hence the name
 
 # Requirements:
@@ -11,15 +12,22 @@ I designed this program because I am left handed and I hate having to rebind all
 
 [pynput](https://pypi.org/project/pynput/)
 
+<<<<<<< HEAD
 [arguments](https://pypi.org/project/arguments/)
 
+=======
+>>>>>>> eed43fb7384c37aa288e0655f23bebf208b82c9a
 # How to use
 
 Create 3 different mode in ckb-next
 
+
 The first one will be your default mode
+
 The second will be the mode with the custom bindings
+
 The third will be for typing while on a game window (can be a duplicate of the first mode)
+
 
 Set all of your custom bindings on the second mode, and preferably add a certain color profile to this mode so you know which mode the board is in at all times
 
