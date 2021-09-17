@@ -4,13 +4,13 @@ from pynput.keyboard import Key, Listener
 global debug
 
 class Keypress (threading.Thread): #Thread for TypingKey Check
-   def __init__(self, threadID, name):
+   def __init__(self, threadID, name, Super):
       threading.Thread.__init__(self)
       self.name = name
    def run(self):
       print("Started " + self.name)
 
-      with Listener(on_press = lambda event: KeypressRun(event)) as listener:
+      with Listener(on_press = lambda event: KeypressRun(event, Super)) as listener:
           listener.join()
 
       print("Exiting " + self.name)
@@ -45,7 +45,7 @@ def CycleRun(Timer, TimerValue, StartFile, GameList):
                 ChangeLayout(WindowName)
 
 
-def KeypressRun(key):
+def KeypressRun(key, Super):
     global Mode
     if key == Key.enter:
         if debug == True:
@@ -59,10 +59,10 @@ def KeypressRun(key):
             Mode = 2
             ModeSwitch("Game")
 
+    if key == key.cmd_l and Super == 1:
+        Mode = 1
+        ModeSwitch("Normal")
 
-    if key == Key.delete:
-        # Stop listener
-        return False
 
 def ModeSwitch(mode):
     if mode == "Game":
@@ -133,14 +133,19 @@ StartFile = sh("cat {0}".format(GameList))
 if __name__ == "__main__":
     UpdateGameList(GameList, AbPath)
 
-    try:
-        if str(sys.argv[1]) == "debug":
-            print("Debug mode enabled")
-            debug = True
-    except:
-        None
+    print(sys.argv)
 
-    Keypress = Keypress(1, "Keypress")
+    if "--debug" in str(sys.argv):
+        print("Debug mode enabled")
+        debug = True
+
+    if "-ds" in str(sys.argv) or "--DisableSuper" in str(sys.argv):
+        Super = 0
+    else:
+        Super = 1
+
+
+    Keypress = Keypress(1, "Keypress", Super)
     Cycle = Cycle(2, "Cycle", StartFile, GameList)
     Keypress.start()
     Cycle.start()
