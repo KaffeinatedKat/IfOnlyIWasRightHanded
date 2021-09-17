@@ -50,7 +50,7 @@ By default, pressing the Super key switches the mode to Normal. This is so if yo
 
 Better ckb-next support (aka AutoMapping Modes, working animations)
 
-More gamelist arguments such as ["TypingKey", "Wildcard", "CursorCheck"]
+More gamelist arguments such as ["CursorCheck"]
 
 Windows Support
 
