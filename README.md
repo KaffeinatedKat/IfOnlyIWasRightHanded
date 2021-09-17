@@ -12,11 +12,8 @@ I designed this program because I am left handed and I hate having to rebind all
 
 [pynput](https://pypi.org/project/pynput/)
 
-<<<<<<< HEAD
 [arguments](https://pypi.org/project/arguments/)
 
-=======
->>>>>>> eed43fb7384c37aa288e0655f23bebf208b82c9a
 # How to use
 
 Create 3 different mode in ckb-next
