@@ -37,12 +37,15 @@ def CycleRun(Timer, TimerValue, StartFile, GameList):
             if StartFile != sh("cat {0}".format(GameList)):
                 UpdateGameList(GameList, AbPath)
 
-            if sh("xdotool getactivewindow getwindowname") != WindowName: #If last known window title is not current update the string
-                WindowName = sh("xdotool getactivewindow getwindowname")
-                if debug == True:
-                    print("Window Changed\nNew Window: {0}".format(WindowName))
+            try:
+                if sh("xdotool getactivewindow getwindowname") != WindowName: #If last known window title is not current update the string
+                    WindowName = sh("xdotool getactivewindow getwindowname")
+                    if debug == True:
+                        print("Window Changed\nNew Window: {0}".format(WindowName))
 
-                ChangeLayout(WindowName)
+                    ChangeLayout(WindowName)
+            except:
+                print("Failed to get window name") #If xdotool fails to get the window name is doesnt exit the program
 
 
 def KeypressRun(key, Super):
